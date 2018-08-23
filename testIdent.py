@@ -1,17 +1,12 @@
-
 import numpy as np
 import caffe
 print "Caffe successfully imported!"
-import os
-os.environ["GLOG_minloglevel"] = "2"
 import scipy.io.wavfile
-import time
 import re
 import os.path
-from multiprocessing import Process
-from subprocess import call
-import sys
 
+wav_list='/scratch_net/biwidl09/hmahdi/VoxCeleb/Identification_split.txt'
+base_address='/scratch_net/biwidl09/hmahdi/VoxCeleb/voxceleb1_wav/'
 pre_emphasis = 0.97
 frame_size = 0.025
 frame_stride = 0.01
@@ -29,9 +24,9 @@ number_of_crops=50
 
 def cropInference(batch_index):
 	for i in range(0,BATCH_SIZE):
-		sampleIndex=batch_index*BATCH_SIZE+i
-		fileName=test_set[sampleIndex] # Every sample within the batch is chosen at random
-		sample_rate, signal = scipy.io.wavfile.read(fileName)  #
+		sample_index=batch_index*BATCH_SIZE+i
+		file_name=test_set[sample_index] # Every sample within the batch is chosen at random
+		sample_rate, signal = scipy.io.wavfile.read(file_name)  #
 		extendedSignal=np.append(signal,signal)
 		beginning=int((len(signal))*np.random.random_sample())
 		signal = extendedSignal[beginning:beginning+48241]  # Number of samples plus one because we need to apply pre-emphasis filter with receptive field of two
@@ -56,12 +51,12 @@ def cropInference(batch_index):
 		frames *= np.hamming(frame_length)
 		mag_frames = np.absolute(np.fft.rfft(frames, NFFT))  # Magnitude of the FFT
 
-		label_batch[i,0,0,0]=test_label[sampleIndex]
+		label_batch[i,0,0,0]=test_label[sample_index]
 		spectrogram_batch[i,0,:,:]= (mag_frames - mag_frames.mean(axis=0)) / mag_frames.std(axis=0)
 
 
 def testAccuracy(net):
-	test_set_size=len()
+	test_set_size=len(test_set)
 	print("Start of testing process on %d samples" % (test_set_size))
 	top1Accuracy=0
 	top5Accuracy=0
@@ -93,20 +88,18 @@ if __name__ == '__main__':
 	print("The training will be executed on GPU #%d" % (allocated_GPU))
 	caffe.set_device(allocated_GPU)
 	caffe.set_mode_gpu()
-	net_weights='result/AMS/512D/Ident/AMS-512D_iter_60000.caffemodel'
-	net = caffe.Net('prototxt/AMS-20V.prototxt',net_weights,caffe.TEST)
+	net_weights='result/LogisticMargin/512D/Ident/LM_512D_30_iter_60000.caffemodel'
+	net = caffe.Net('prototxt/LogisticMargin.prototxt',net_weights,caffe.TEST)
 	print("The network will be initialized with coefficients from %s" % (net_weights))
 
-	wav_list='/scratch_net/biwidl09/hmahdi/VoxCeleb/Identification_split.txt'
-	base_address='/scratch_net/biwidl09/hmahdi/VoxCeleb/voxceleb1_wav/'
-	inputfile = open(wav_list,'r')
+	input_file = open(wav_list,'r')
 	identity=0 
 	split_index=1
-	for line in inputfile:
-		parsedLine=re.split(r'[ \n]+', line)	
-		utterance_address=base_address+parsedLine[1]
+	for line in input_file:
+		parsed_line=re.split(r'[ \n]+', line)	
+		utterance_address=base_address+parsed_line[1]
 		prev_split_index=split_index
-		split_index=int(parsedLine[0])
+		split_index=int(parsed_line[0])
 		if (prev_split_index>split_index):
 			identity=identity+1
 		if (os.path.isfile(utterance_address)==False): # The file does not exist
@@ -125,4 +118,3 @@ if __name__ == '__main__':
 	print("The size of test set: %d" % (len(test_set))) 
 	print("Number of identities: %d" % (identity+1))
 	testAccuracy(net)
-	sys.stdout.flush()
