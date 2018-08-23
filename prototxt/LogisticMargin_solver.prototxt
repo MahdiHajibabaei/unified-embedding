@@ -1,0 +1,18 @@
+
+net: "/scratch_net/biwidl09/hmahdi/VoxCeleb/python_trainer/prototxt/LogisticMargin.prototxt"
+
+base_lr: 0.005#0.005
+lr_policy: "step"
+gamma: 0.75
+iter_size: 1
+
+stepsize: 4000
+max_iter: 61000
+
+display: 100
+momentum: 0.93
+weight_decay: 0.0005
+snapshot: 4000
+snapshot_prefix: "result/LogisticMargin/512D/Ident/LM_512D_30"
+
+solver_mode: GPU
