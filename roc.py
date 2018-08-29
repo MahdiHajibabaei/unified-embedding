@@ -66,7 +66,6 @@ if __name__ == '__main__':
 	print("EER= %.2f  DCF0.01= %.3f  DCF0.001= %.3f" %(100*fpr[np.argmin(intersection)],np.min(DCF2),np.min(DCF3)))
 	plt.figure()
 	plt.semilogx(fpr, tpr)
-	plt.title('semilogx')
 	plt.grid(True)
 	plt.xlabel('False Positive Rate')
 	plt.ylabel('True Positive Rate')
