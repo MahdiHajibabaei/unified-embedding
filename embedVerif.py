@@ -22,7 +22,7 @@ spectrogram_batch=np.empty([BATCH_SIZE,1,300,257],dtype=float) # np.int((NFFT+1)
 label_batch=np.empty([BATCH_SIZE,1,1,1],dtype=float)
 number_of_crops=50
 
-def cropInference(batch_index):
+def crop_inference(batch_index):
 	for i in range(0,BATCH_SIZE):
 		sampleIndex=batch_index*BATCH_SIZE+i
 		if (sampleIndex>=len(test_set)):
@@ -57,12 +57,12 @@ def cropInference(batch_index):
 		spectrogram_batch[i,0,:,:]= (mag_frames - mag_frames.mean(axis=0)) / mag_frames.std(axis=0)
 
 
-def testAccuracy(net):
+def test_accuracy(net):
 	print "Start of testing process.."
 	test_set_size=len(test_set)
 	for i in range(0,(test_set_size/BATCH_SIZE)+1):
 		for j in range(0,number_of_crops):        
-			cropInference(i)
+			crop_inference(i)
 			net.blobs['data'].data[...] =spectrogram_batch
 			net.blobs['label'].data[...]  =label_batch
 			net.forward()
@@ -121,4 +121,4 @@ if __name__ == '__main__':
 	print("The size of validation set: %d" % (len(validation_set))) 
 	print("The size of test set: %d" % (len(test_set))) 
 	print("Number of identities: %d" % (identity+1))
-	testAccuracy(net)
+	test_accuracy(net)

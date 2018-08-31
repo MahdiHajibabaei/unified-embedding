@@ -31,7 +31,7 @@ if __name__ == '__main__':
 	print("The size of test set: %d" % (len(test_set))) 
 	print("Number of identities: %d" % (identity+1))
 	roc_size=4872
-	embeddings=np.load("embeddings/AMS_128Dropout.npy")
+	embeddings=np.load("ResNet_512thin.npy")
 	embeddings=np.asarray(embeddings[0:roc_size,:])
 	embeddings=(embeddings) / np.sqrt(np.sum(np.square(embeddings), axis=1))[:,None]
 	score_matrix=[]

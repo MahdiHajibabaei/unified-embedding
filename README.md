@@ -26,6 +26,9 @@ Add Pycaffe's path to the *PYTHONPATH* environment variable by putting the follo
 
 1. Comment the block of the code in *trainAug.py* that initializes the network's coefficient with *net_weights* and train the network from scratch
 with softmax and cross-entropy loss function by setting the argument of caffe.SGDSolver to "prototxt/ResNet-20_solver.prototxt" and executing the *trainAug.py* script
+
 Note: if you are not using Sun Grid Engine, set allocated_GPU to the id of the GPU that you wish to use for training.
 
 2. Uncomment the weight initialization block and set *net_weights* to address of Caffemodel file that resulted in previous step.
+
+
