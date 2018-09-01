@@ -44,13 +44,13 @@ The top5 accuracy on test set is 0.9830
 4. If you wish to evaluate the verification accuracy of a model trained for the task of verification, you first need to extract the embeddings of utterances within the test set. In order to do so, open the *embedVerif.py* and set the *net_weights* to caffemodel that you wish to evaluate and *net_prototxt* to prototxt file of structure of network of interest. Remember to  set *embedding_file* to a proper name and directory for storing the resulting embedding. Run the *embedVerif.py*, it will take about half an hour to finish on a Titan Xp. The message "Embeddings of test utterances are stored in ..." will presented after successful completion.
 
 In order to evaluate the Equal Error Rate (EER) and minimum of detection cost function on pairs selected by Nagrani et al., set the *embedding_file* in rocVox.py to address of the embedding that you wish to evaluate and execute the script. Two figures will be displayed: The fist on shows the separation of true match (positive) and false match (negative) pairs:
-![picture](https://github.com/MahdiHajibabaei/unified-embedding/blob/master/figures/rocVox_pairs.jpeg =250x)
+![picture](https://github.com/MahdiHajibabaei/unified-embedding/blob/master/figures/rocVox_pairs.jpeg|width=100)
 
 
 The second figure shows the ROC of the embeddings:
 
 
-![picture](https://github.com/MahdiHajibabaei/unified-embedding/blob/master/figures/rocVox_ROC.jpeg =250x)
+![picture](https://github.com/MahdiHajibabaei/unified-embedding/blob/master/figures/rocVox_ROC.jpeg|width=100)
 
 
 
