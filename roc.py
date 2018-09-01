@@ -7,7 +7,7 @@ from sklearn.metrics import roc_curve, auc, roc_auc_score
 
 wav_list='/scratch_net/biwidl09/hmahdi/VoxCeleb/Identification_split.txt'
 base_address='/scratch_net/biwidl09/hmahdi/VoxCeleb/voxceleb1_wav/'
-embedding_file="embeddings/LM-512D.npy"
+embedding_file="embeddings/LM_512D.npy"
 
 if __name__ == '__main__':
 
@@ -56,8 +56,9 @@ if __name__ == '__main__':
 	print("There are %d matching pairs and %d non-matching pairs" % (len(true_match),len(false_match)))
 
 	bins = np.linspace(-1.2, 1.2, 240)
-	plt.hist(true_match, bins,  density=True, facecolor='g', alpha=0.75,label='true_match')
-	plt.hist(false_match, bins,  density=True, label='false_match')
+	plt.hist(true_match, bins,  density=True, facecolor='g', alpha=0.75,label='positive_pair')
+	plt.hist(false_match, bins,  density=True,  label='negative_pair')
+	plt.title('Similarity score of positive and negative pairs')
 	plt.legend(loc='upper right')
 	plt.show()
 

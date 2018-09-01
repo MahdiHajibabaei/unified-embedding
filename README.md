@@ -18,7 +18,9 @@ In this work we first train a ResNet-20 with the typical softmax loss function a
 1. Request the audio files from *Nagrani et al.* and extract the wav files to a directory that would be refered to as *base_address*.
 
 2. Follow the instructions to *make* the caffe and pycaffe for each aforementioned caffe build, since they contain all the modules in a typical Caffe build there is no need to have Caffe pre-installed on your computer.
-Add Pycaffe's path to the *PYTHONPATH* environment variable by putting the following to the .bashrc "export PYTHONPATH={PATH_TO_CAFFE}/python"
+Add Pycaffe's path to the *PYTHONPATH* environment variable by putting the following to the .bashrc: 
+
+export PYTHONPATH={PATH_TO_CAFFE}/python
 
 3. Clone this directory
 
@@ -37,19 +39,18 @@ After training is finished the networks' coefficient and the state of solver wou
 3. If you have chosen the mode identification, you need to execute *testIdent.py* script. But before executing, please set the variable *net_weights* to caffemodel that you wish to evaluate and *net_prototxt* to prototxt file of structure of network in interest. Run the script, in the end of evaluation the top-1 and top-5 accuracy would be printed in the terminal similar to message below:
 
 The top1 accuracy on test set is 0.9447
-
 The top5 accuracy on test set is 0.9830
 
 4. If you wish to evaluate the verification accuracy of a model trained for the task of verification, you first need to extract the embeddings of utterances within the test set. In order to do so, open the *embedVerif.py* and set the *net_weights* to caffemodel that you wish to evaluate and *net_prototxt* to prototxt file of structure of network of interest. Remember to  set *embedding_file* to a proper name and directory for storing the resulting embedding. Run the *embedVerif.py*, it will take about half an hour to finish on a Titan Xp. The message "Embeddings of test utterances are stored in ..." will presented after successful completion.
 
 In order to evaluate the Equal Error Rate (EER) and minimum of detection cost function on pairs selected by Nagrani et al., set the *embedding_file* in rocVox.py to address of the embedding that you wish to evaluate and execute the script. Two figures will be displayed: The fist on shows the separation of true match (positive) and false match (negative) pairs:
-![picture](https://github.com/MahdiHajibabaei/unified-embedding/blob/master/figures/rocVox_pairs.jpeg)
+![picture](https://github.com/MahdiHajibabaei/unified-embedding/blob/master/figures/rocVox_pairs.jpeg =250x)
 
 
 The second figure shows the ROC of the embeddings:
 
 
-![picture](https://github.com/MahdiHajibabaei/unified-embedding/blob/master/figures/rocVox_ROC.jpeg)
+![picture](https://github.com/MahdiHajibabaei/unified-embedding/blob/master/figures/rocVox_ROC.jpeg =250x)
 
 
 
