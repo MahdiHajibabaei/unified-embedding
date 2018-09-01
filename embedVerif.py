@@ -7,6 +7,8 @@ import os.path
 
 wav_list='/scratch_net/biwidl09/hmahdi/VoxCeleb/Identification_split.txt'
 base_address='/scratch_net/biwidl09/hmahdi/VoxCeleb/voxceleb1_wav/'
+embedding_file="embeddings/LM_512D.npy"
+
 pre_emphasis = 0.97
 frame_size = 0.025
 frame_stride = 0.01
@@ -57,8 +59,8 @@ def crop_inference(batch_index):
 		spectrogram_batch[i,0,:,:]= (mag_frames - mag_frames.mean(axis=0)) / mag_frames.std(axis=0)
 
 
-def test_accuracy(net):
-	print "Start of testing process.."
+def evaluate_embeddings(net):
+	print "Start of embedding test utterances to embedding space ..."
 	test_set_size=len(test_set)
 	for i in range(0,(test_set_size/BATCH_SIZE)+1):
 		for j in range(0,number_of_crops):        
@@ -78,9 +80,10 @@ def test_accuracy(net):
 			embeddings=net.blobs['fc5'].data		
 		else:
 			embeddings=np.append(embeddings,net.blobs['fc5'].data,axis=0)
-		print("Batch #%d of testing is evaluated"% (i))
+		print("Batch #%d of utterances is evaluated"% (i))
 	embeddings=embeddings[0:test_set_size,:]
-	np.save("ResNet_256Dropout.npy",embeddings)
+	np.save(embedding_file,embeddings)
+	print("Embeddings of test utterances are stored in %s" % (embedding_file))
 		
 
 
@@ -90,9 +93,9 @@ if __name__ == '__main__':
 	print("The training will be executed on GPU #%d" % (allocated_GPU))
 	caffe.set_device(allocated_GPU)
 	caffe.set_mode_gpu()
-
-	net_weights='result/ResNet-20/256D/Verif/ResNet-20_256Dropout_iter_61600.caffemodel'
-	net = caffe.Net('prototxt/ResNet-20_pooling.prototxt',net_weights,caffe.TEST)
+	net_weights='result/LM_512D_30_iter_61600.caffemodel'
+	net_prototxt='prototxt/LogisticMargin.prototxt'
+	net = caffe.Net(net_prototxt,net_weights,caffe.TEST)
 	print("The network will be initialized with coefficients from %s" % (net_weights))
 
 	input_file = open(wav_list,'r')
@@ -121,4 +124,4 @@ if __name__ == '__main__':
 	print("The size of validation set: %d" % (len(validation_set))) 
 	print("The size of test set: %d" % (len(test_set))) 
 	print("Number of identities: %d" % (identity+1))
-	test_accuracy(net)
+	evaluate_embeddings(net)

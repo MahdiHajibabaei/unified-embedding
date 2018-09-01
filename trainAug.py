@@ -133,12 +133,14 @@ if __name__ == '__main__':
 	print("The %s training will be executed on GPU #%d" % (mode,allocated_GPU))
 	caffe.set_device(allocated_GPU)
 	caffe.set_mode_gpu()
-	solver = caffe.SGDSolver("prototxt/LogisticMargin_solver.prototxt")#
-	# Comment the following block when training from scratch and uncomment to fine-tune
+	solver = caffe.SGDSolver("prototxt/ResNet-20_solver.prototxt")# Network with typical softmax with cross entropy loss function
+	# Uncomment the following block when training from scratch and uncomment to fine-tune
+	''''
+	solver = caffe.SGDSolver("prototxt/LogisticMargin_solver.prototxt")# Network with logistic margin loss function
 	net_weights='result/ResNet-20/512D/Ident/Aug/ResNet-20_512D_iter_61600.caffemodel'
 	print("The network will be initialized with %s" % (net_weights))
 	solver.net.copy_from(net_weights)
-
+	'''
 	parse_list(mode)
 	train_set_size=len(train_set)
 	

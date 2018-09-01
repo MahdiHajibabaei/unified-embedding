@@ -5,12 +5,14 @@ import os.path
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc, roc_auc_score
 
+wav_list='/scratch_net/biwidl09/hmahdi/VoxCeleb/Identification_split.txt'
+base_address='/scratch_net/biwidl09/hmahdi/VoxCeleb/voxceleb1_wav/'
+embedding_file="embeddings/LM_512D.npy"
+
 if __name__ == '__main__':
 
 	test_set=[]
 	test_label=[]
-	wav_list='/scratch_net/biwidl09/hmahdi/VoxCeleb/Identification_split.txt'
-	base_address='/scratch_net/biwidl09/hmahdi/VoxCeleb/voxceleb1_wav/'
 	input_file = open(wav_list,'r')
 	identity=0
 	split_index=1
@@ -29,8 +31,8 @@ if __name__ == '__main__':
 
 	print("The size of test set: %d" % (len(test_set))) 
 	print("Number of identities: %d" % (identity+1))
-	roc_size=4850
-	embeddings=np.load("embeddings/augVerificationEmbeddingsLog.npy")
+	roc_size=4872
+	embeddings=np.load(embedding_file)
 	embeddings=np.asarray(embeddings[0:roc_size,:])
 	embeddings=(embeddings ) / np.sqrt(np.sum(np.square(embeddings), axis=1))[:,None]
 	score_matrix=[]

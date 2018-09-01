@@ -1,4 +1,4 @@
-name: "Sphere-20"
+name: "LogisticMargin"
 
 input: "data"
 input_dim: 50

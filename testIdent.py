@@ -88,8 +88,9 @@ if __name__ == '__main__':
 	print("The training will be executed on GPU #%d" % (allocated_GPU))
 	caffe.set_device(allocated_GPU)
 	caffe.set_mode_gpu()
-	net_weights='result/LogisticMargin/512D/Ident/LM_512D_30_iter_60000.caffemodel'
-	net = caffe.Net('prototxt/LogisticMargin.prototxt',net_weights,caffe.TEST)
+	net_weights='result/LM_512D_30_iter_61600.caffemodel'
+	net_prototxt='prototxt/LogisticMargin.prototxt'
+	net = caffe.Net(net_prototxt,net_weights,caffe.TEST)
 	print("The network will be initialized with coefficients from %s" % (net_weights))
 
 	input_file = open(wav_list,'r')
