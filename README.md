@@ -70,16 +70,21 @@ Since the most computational expensive part of evaluation in verification is emb
 
 If you wish to compare the prediction accuracy and performance of models trained and/or evlauted without repetition and time-reversion augmentation, alter with following lines:	
 	
->>	extended_signal=np.append(signal,signal)
->>	beginning=int((len(signal))*np.random.random_sample())
->>	signal = extended_signal[beginning:beginning+48241]
->>	if (np.int(np.random.random_sample()*2)==1):
->>		signal= signal[::-1]
+>	extended_signal=np.append(signal,signal)
+
+>	beginning=int((len(signal))*np.random.random_sample())
+
+>	signal = extended_signal[beginning:beginning+48241]
+
+>	if (np.int(np.random.random_sample()*2)==1):
+
+>		signal= signal[::-1]
 
 with:
 
->>	beginning=int((len(signal)-48241)*np.random.random_sample())
->>	signal = signal[beginning:beginning+48241]
+>	beginning=int((len(signal)-48241)*np.random.random_sample())
+
+>	signal = signal[beginning:beginning+48241]
 
 in trainAug.py if you with to eliminate augmentation in training phase and in embedVerif.py or testIdent.py if you wish to eliminate augmentation in evaluating verification and identification accuracies respectively.
 
