@@ -70,21 +70,21 @@ Since the most computational expensive part of evaluation in verification is emb
 
 If you wish to compare the prediction accuracy and performance of models trained and/or evlauted without repetition and time-reversion augmentation, alter with following lines:	
 	
->	extended_signal=np.append(signal,signal)
+	extended_signal=np.append(signal,signal)
 
->	beginning=int((len(signal))*np.random.random_sample())
+	beginning=int((len(signal))*np.random.random_sample())
 
->	signal = extended_signal[beginning:beginning+48241]
+	signal = extended_signal[beginning:beginning+48241]
 
->	if (np.int(np.random.random_sample()*2)==1):
+	if (np.int(np.random.random_sample()*2)==1):
 
->		signal= signal[::-1]
+		signal= signal[::-1]
 
 with:
 
->	beginning=int((len(signal)-48241)*np.random.random_sample())
+	beginning=int((len(signal)-48241)*np.random.random_sample())
 
->	signal = signal[beginning:beginning+48241]
+	signal = signal[beginning:beginning+48241]
 
 in trainAug.py if you with to eliminate augmentation in training phase and in embedVerif.py or testIdent.py if you wish to eliminate augmentation in evaluating verification and identification accuracies respectively.
 
@@ -100,23 +100,23 @@ There is also an ongoing National Institute of Technology Speaker Recognition Ev
 
 If you plan to use the repetition and time-reversion augmentation, please consider citing my paper:
 
-@article{hajibabaei2018unified,
-  title={Unified Hypersphere Embedding for Speaker Recognition},
-  author={Hajibabaei, Mahdi and Dai, Dengxin},
-  journal={arXiv preprint arXiv:1807.08312},
-  year={2018}
-}
+	@article{hajibabaei2018unified,
+	title={Unified Hypersphere Embedding for Speaker Recognition},
+	author={Hajibabaei, Mahdi and Dai, Dengxin},
+	journal={arXiv preprint arXiv:1807.08312},
+	year={2018}
+	}
 
 And if you plan to use Logistic Margin loss function please cite the original AM-Softmax paper (with bibtex given below) along my paper.
 
-@article{wang2018additive,
-  title={Additive margin softmax for face verification},
-  author={Wang, Feng and Cheng, Jian and Liu, Weiyang and Liu, Haijun},
-  journal={IEEE Signal Processing Letters},
-  volume={25},
-  number={7},
-  pages={926--930},
-  year={2018},
-  publisher={IEEE}
-}
+	@article{wang2018additive,
+	title={Additive margin softmax for face verification},
+	author={Wang, Feng and Cheng, Jian and Liu, Weiyang and Liu, Haijun},
+	journal={IEEE Signal Processing Letters},
+	volume={25},
+	number={7},
+	pages={926--930},
+	year={2018},
+	publisher={IEEE}
+	}
 
