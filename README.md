@@ -42,6 +42,8 @@ The top1 accuracy on test set is 0.9447
 
 The top5 accuracy on test set is 0.9830
 
+**Important note: in recent face recognition literature, similarity of two face images are evaluated by first projecting each face image into an embedding space by feeding it to a CNN. Then a score is given to the similarity of images based on cosine similarity of the embedding of two faces. In result, first we need to embed each sample into a relatively low dimensional embedding space ( by executing embedVerif) and then we can use cosine similarity of these embedding two evaluate the odds of two utterances belonging to the same person**
+
 4. If you wish to evaluate the verification accuracy of a model trained for the task of verification, you first need to extract the embeddings of utterances within the test set. In order to do so, open the *embedVerif.py* and set the *net_weights* to caffemodel that you wish to evaluate and *net_prototxt* to prototxt file of structure of network of interest. Remember to  set *embedding_file* to a proper name and directory for storing the resulting embedding. Run the *embedVerif.py*, it will take about half an hour to finish on a Titan Xp. The message "Embeddings of test utterances are stored in ..." will presented after successful completion.
 
 In order to evaluate the Equal Error Rate (EER) and minimum of detection cost function on pairs selected by Nagrani et al., set the *embedding_file* in rocVox.py to address of the embedding that you wish to evaluate and execute the script. Two figures will be displayed: The first one shows the separation between true match (positive) and false match (negative) pairs:
@@ -61,4 +63,55 @@ If you wish to evaluate the verification accuracy of any trained model on all po
 
 ![picture](https://github.com/MahdiHajibabaei/unified-embedding/blob/master/figures/roc_ROC.jpeg)
 
+
+Since the most computational expensive part of evaluation in verification is embedding the test utterances into embedding space and evaluating ROC's only requires number_of_pairs * embedding_dimensionality multiplication and addition operation, evaluating verification accuracy using all possible pairs won't add a significant computational overhead overall. However, in numerous face recognition literature (such as BLUFR) it has been shown that using very few pairs for evaluating and comparing different implementation will result in unfair and unrealistic optimization. In result, **please evaluate the verification accuracy of your model (whether  recognizing through face or voice) on all possible pairs not few pre-selected ones**.   
+
+### Training and/or evaluating without augmentation
+
+If you wish to compare the prediction accuracy and performance of models trained and/or evlauted without repetition and time-reversion augmentation, alter with following lines:	
+	
+>>	extended_signal=np.append(signal,signal)
+>>	beginning=int((len(signal))*np.random.random_sample())
+>>	signal = extended_signal[beginning:beginning+48241]
+>>	if (np.int(np.random.random_sample()*2)==1):
+>>		signal= signal[::-1]
+
+with:
+
+>>	beginning=int((len(signal)-48241)*np.random.random_sample())
+>>	signal = signal[beginning:beginning+48241]
+
+in trainAug.py if you with to eliminate augmentation in training phase and in embedVerif.py or testIdent.py if you wish to eliminate augmentation in evaluating verification and identification accuracies respectively.
+
+The 48241 samples represents 3.015 seconds of recordings plus an extra sample to compensate for receptive field of pre-emphasis.
+
+### Future works
+
+At the time of running this experiments, *VoxCeleb* was the largest publicly available dataset in hand with two weeks of recordings and 40 speakers set aside for testing verification accuracy. however, [*VoxCeleb2*](http://www.robots.ox.ac.uk/~vgg/data/voxceleb/vox2.html) dataset with more speakers and more statistically sound evaluation was released in April 2018. It would be really interesting to see how much improvement using suggested loss functions and augmentation would yield.
+
+There is also an ongoing National Institute of Technology Speaker Recognition Evaluation (NIST SRE) challenge that lists *VoxCeleb* and *VoxCeleb2* as their official training dataset. It would be interesting to see how much of an edge using the suggested loss functions and augmentation would give to the contestant.
+
+### Citation
+
+If you plan to use the repetition and time-reversion augmentation, please consider citing my paper:
+
+@article{hajibabaei2018unified,
+  title={Unified Hypersphere Embedding for Speaker Recognition},
+  author={Hajibabaei, Mahdi and Dai, Dengxin},
+  journal={arXiv preprint arXiv:1807.08312},
+  year={2018}
+}
+
+And if you plan to use Logistic Margin loss function please cite the original AM-Softmax paper (with bibtex given below) along my paper.
+
+@article{wang2018additive,
+  title={Additive margin softmax for face verification},
+  author={Wang, Feng and Cheng, Jian and Liu, Weiyang and Liu, Haijun},
+  journal={IEEE Signal Processing Letters},
+  volume={25},
+  number={7},
+  pages={926--930},
+  year={2018},
+  publisher={IEEE}
+}
 
