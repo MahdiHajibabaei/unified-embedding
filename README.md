@@ -18,23 +18,28 @@ In this work we first train a ResNet-20 with the typical softmax loss function a
 1. Request the audio files from *Nagrani et al.* and extract the wav files to a directory that would be refered to as *base_address*.
 
 2. Follow the instructions to *make* the caffe and pycaffe for each aforementioned caffe build, since they contain all the modules in a typical Caffe build there is no need to have Caffe pre-installed on your computer.
-Add Pycaffe's path to the *PYTHONPATH* environment variable by putting the following to the .bashrc: 
+Add Pycaffe's path to the *PYTHONPATH* environment variable by copying the following line to the .bashrc: 
 
-export PYTHONPATH={PATH_TO_CAFFE}/python
+	export PYTHONPATH={PATH_TO_CAFFE}/python
 
 3. Clone this directory
 
 ### Training with augmentation
 
-Note: Since there is an intersection between the training, validation and testing split for verification and identification. You need to specify which task you want to train for by setting *mode* to either 'identification' or 'verification'. If you want to use this pipeline to train on another dataset please modify the content of parse_list to append the address of each sample to *_set and its label to *_label.
+Note: Since there is an intersection between the training, validation and testing split for verification and identification. You need to specify which task you want to train for by setting *mode* to either 'identification' or 'verification'. If you want to use this pipeline to train on another dataset please modify the content of parse_list function to append the address of each sample to *_set and its label to *_label.
 Note: if you are not using Sun Grid Engine, set allocated_GPU to the id of the GPU that you wish to use.
 
-1. Comment the block of the code in *trainAug.py* that initializes the network's coefficient with *net_weights* and train the network from scratch
+1. Comment the following block of the code in *trainAug.py* that initializes the network's coefficient with *net_weights* and trains the network from scratch
 with softmax and cross-entropy loss function by setting the argument of caffe.SGDSolver to "prototxt/ResNet-20_solver.prototxt" and executing the *trainAug.py* script
 
-After training is finished the networks' coefficient and the state of solver would be stored in result/, we will use the network coefficient (result/ResNet-20_512D_iter_61600.caffemodel) to initialize the network for training with more discriminative loss functions.
+	solver = caffe.SGDSolver("prototxt/LogisticMargin_solver.prototxt")# Network with logistic margin loss function
+	net_weights='result/ResNet-20_512D_iter_61600.caffemodel'
+	print("The network will be initialized with %s" % (net_weights))
+	solver.net.copy_from(net_weights)
 
-2. Uncomment the block of the code responsible for fine-tuning that loads the solver of more discriminative loss function and initializes the network with coefficients of softmax with cross entropy trained network. Run the script *trainAug.py* again, this time "LM_512D_30_iter_61600.caffemodel" would be saved to result/.
+After training is finished the trained network's coefficients and the state of solver would be stored in *result* directory, we will use the network coefficients (e.g. result/ResNet-20_512D_iter_61600.caffemodel) to initialize the network for training with more discriminative loss functions.
+
+2. Uncomment the aforementioned block of the code and make sure *net_weights* is set to the address of the previous caffemodel. Run the script *trainAug.py* again, this time "LM_512D_30_iter_61600.caffemodel" would be saved to *result* directory.
 
 3. If you have chosen the mode identification, you need to execute *testIdent.py* script. But before executing, please set the variable *net_weights* to caffemodel that you wish to evaluate and *net_prototxt* to prototxt file of structure of network in interest. Run the script, in the end of evaluation the top-1 and top-5 accuracy would be printed in the terminal similar to message below:
 
@@ -71,24 +76,33 @@ Since the most computational expensive part of evaluation in verification is emb
 If you wish to compare the prediction accuracy and performance of models trained and/or evlauted without repetition and time-reversion augmentation, alter with following lines:	
 	
 	extended_signal=np.append(signal,signal)
-
 	beginning=int((len(signal))*np.random.random_sample())
-
 	signal = extended_signal[beginning:beginning+48241]
-
 	if (np.int(np.random.random_sample()*2)==1):
-
 		signal= signal[::-1]
 
 with:
 
 	beginning=int((len(signal)-48241)*np.random.random_sample())
-
 	signal = signal[beginning:beginning+48241]
 
 in trainAug.py if you with to eliminate augmentation in training phase and in embedVerif.py or testIdent.py if you wish to eliminate augmentation in evaluating verification and identification accuracies respectively.
 
 The 48241 samples represents 3.015 seconds of recordings plus an extra sample to compensate for receptive field of pre-emphasis.
+
+### Effect of dropout on verification accuracy 
+
+Applying dropout to penultimate layer of CNN improved the verification accuracy but deteriorated the identification accuracy. If you wish to apply drop out during training, just uncomment the following lines from prototxt of network's structure. 
+
+	layer {
+	name: "drop6"
+	type: "Dropout"
+	bottom: "res4_3p"
+	top: "res4_3p"
+	dropout_param {
+		dropout_ratio: 0.5
+	  }
+	}
 
 ### Future works
 
