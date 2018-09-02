@@ -53,5 +53,12 @@ The second figure shows the ROC of the embeddings:
 
 ![picture](https://github.com/MahdiHajibabaei/unified-embedding/blob/master/figures/rocVox_ROC.jpeg)
 
+The EER and minimum of detection cost functions (DCF) would be printed on the console afterwards.
+
+If you wish to evaluate the verification accuracy of any trained model on all possible pairs (about 11.9 million) within verification test set, set the *embedding_file* in roc.py to address of evaluated embeddings and run the script. Similar to the evaluating on few pre-selected pair, two figures would be shown as follows:
+
+![picture](https://github.com/MahdiHajibabaei/unified-embedding/blob/master/figures/roc_pairs.jpeg)
+
+![picture](https://github.com/MahdiHajibabaei/unified-embedding/blob/master/figures/roc_ROC.jpeg)
 
 

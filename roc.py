@@ -56,8 +56,8 @@ if __name__ == '__main__':
 	print("There are %d matching pairs and %d non-matching pairs" % (len(true_match),len(false_match)))
 
 	bins = np.linspace(-1.2, 1.2, 240)
-	plt.hist(true_match, bins,  density=True, facecolor='g', alpha=0.75,label='positive_pair')
-	plt.hist(false_match, bins,  density=True,  label='negative_pair')
+	plt.hist(true_match, bins,  density=True, facecolor='g', alpha=0.75,label='positive pairs')
+	plt.hist(false_match, bins,  density=True,  label='negative pairs')
 	plt.title('Similarity score of positive and negative pairs')
 	plt.legend(loc='upper right')
 	plt.show()
