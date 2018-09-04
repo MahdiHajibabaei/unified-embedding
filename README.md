@@ -73,7 +73,7 @@ Since the most computational expensive part of evaluation in verification is emb
 
 ### Training and/or evaluating without augmentation
 
-If you wish to compare the prediction accuracy and performance of models trained and/or evlauted without repetition and time-reversion augmentation, alter with following lines:	
+If you wish to compare the prediction accuracy and performance of models trained and/or evaluated without repetition and time-reversion augmentation, alter with following lines:	
 	
 	extended_signal=np.append(signal,signal)
 	beginning=int((len(signal))*np.random.random_sample())
