@@ -26,8 +26,8 @@ Add Pycaffe's path as *PYTHONPATH* environment variable by copying the following
 
 ### Training with augmentation
 
-    Note: Since there is an intersection between the training, validation and testing split for verification and identification. You need to specify which task you want to train for by setting *mode* to either 'identification' or 'verification'. If you want to use this pipeline to train on another dataset please modify the content of parse_list function to append the address of each sample to *_set and its label to *_label.
-    Note: if you are not using Sun Grid Engine, set allocated_GPU to the id of the GPU that you wish to use.
+   Note: Since there is an intersection between the training, validation and testing split for verification and identification. You need to specify which task you want to train for by setting *mode* to either 'identification' or 'verification'. If you want to use this pipeline to train on another dataset please modify the content of parse_list function to append the address of each sample to *_set and its label to *_label.
+   Note: if you are not using Sun Grid Engine, set allocated_GPU to the id of the GPU that you wish to use.
 
 1. Comment the following block of the code in *train_aug.py* that initializes the network's coefficient with *net_weights* and trains the network from scratch
 with softmax and cross entropy loss function by setting the argument of caffe.SGDSolver to "prototxt/ResNet-20_solver.prototxt" and executing the *train_aug.py* script.
@@ -43,15 +43,14 @@ with softmax and cross entropy loss function by setting the argument of caffe.SG
 
 3. If you have chosen the mode identification, you need to execute *test_ident.py* script. But before executing, please set the variable *net_weights* to caffemodel that you wish to evaluate and *net_prototxt* to prototxt file of structure of network in interest. Run the script, in the end of execution, the top-1 and top-5 accuracies would be printed in the terminal similar to the message below:
 
-	The top1 accuracy on test set is 0.9447
-
-	The top5 accuracy on test set is 0.9830
+	 The top1 accuracy on test set is 0.9447
+	 The top5 accuracy on test set is 0.9830
 
     Important note: in recent face recognition literature, similarity of two face images are evaluated by first projecting each face image into an embedding space by feeding it to a CNN. Then a score is given to the similarity of images based on cosine similarity of the embeddings of two faces. In result, first we need to embed each sample into a relatively low dimensional embedding space ( by executing embed_verif.py) and then we can use cosine similarity of these embedding to evaluate the odds of two utterances belonging to the same person
 
 4. If you wish to evaluate the verification accuracy of a model trained for the task of verification, you first need to extract the embeddings of utterances within the test set. In order to do so, open the *embed_verif.py* and set the *net_weights* to caffemodel that you wish to evaluate and *net_prototxt* to prototxt of the structure of network of interest. Remember to  set *embedding_file* to a proper name and directory for storing the resulting embedding. After executing embed_verif.py, the message "Embeddings of test utterances are stored in ..." will printed in terminal.
 
-In order to evaluate the Equal Error Rate (EER) and minimum of detection cost function (DCF) on pairs selected by Nagrani et al., set the *embedding_file* in roc_vox.py to address of the embedding that you wish to evaluate and execute the script. Two figures will be displayed: The first one shows the separation between positive pairs and negative pairs:
+    In order to evaluate the Equal Error Rate (EER) and minimum of detection cost function (DCF) on pairs selected by Nagrani et al., set the *embedding_file* in roc_vox.py to address of the embedding that you wish to evaluate and execute the script. Two figures will be displayed: The first one shows the separation between positive pairs and negative pairs:
 ![picture](https://github.com/MahdiHajibabaei/unified-embedding/blob/master/figures/rocVox_pairs.jpeg)
 
 
