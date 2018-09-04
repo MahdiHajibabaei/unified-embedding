@@ -1,4 +1,3 @@
-
 import numpy as np
 import re
 import os.path
@@ -53,7 +52,7 @@ if __name__ == '__main__':
 				score_matrix.append(score)
 				label_matrix.append(0)
 				false_match.append(score)
-	print("There are %d matching pairs and %d non-matching pairs" % (len(true_match),len(false_match)))
+	print("There are %d positive pairs and %d negative pairs" % (len(true_match),len(false_match)))
 
 	bins = np.linspace(-1.2, 1.2, 240)
 	plt.hist(true_match, bins,  density=True, facecolor='g', alpha=0.75,label='positive pairs')

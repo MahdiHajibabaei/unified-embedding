@@ -56,6 +56,7 @@ def crop_inference(batch_index):
 
 
 def test_accuracy(net):
+	
 	test_set_size=len(test_set)
 	print("Start of testing process on %d samples" % (test_set_size))
 	top1Accuracy=0

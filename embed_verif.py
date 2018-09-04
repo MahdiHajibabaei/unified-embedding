@@ -25,15 +25,16 @@ label_batch=np.empty([BATCH_SIZE,1,1,1],dtype=float)
 number_of_crops=50
 
 def crop_inference(batch_index):
+
 	for i in range(0,BATCH_SIZE):
-		sampleIndex=batch_index*BATCH_SIZE+i
-		if (sampleIndex>=len(test_set)):
+		sample_index=batch_index*BATCH_SIZE+i
+		if (sample_index>=len(test_set)):
 			continue
-		fileName=test_set[sampleIndex] # Every sample within the batch is chosen at random
+		fileName=test_set[sample_index] # Every sample within the batch is chosen at random
 		sample_rate, signal = scipy.io.wavfile.read(fileName)  #
-		extendedSignal=np.append(signal,signal)
+		extended_signal=np.append(signal,signal)
 		beginning=int((len(signal))*np.random.random_sample())
-		signal = extendedSignal[beginning:beginning+48241]  # Number of samples plus one because we need to apply pre-emphasis filter with receptive field of two
+		signal = extended_signal[beginning:beginning+48241]  # Number of samples plus one because we need to apply pre-emphasis filter with receptive field of two
 		if (np.int(np.random.random_sample()*2)==1):
 			signal= signal[::-1]
 		signal=signal-np.mean(signal)
@@ -55,7 +56,7 @@ def crop_inference(batch_index):
 		frames *= np.hamming(frame_length)
 		mag_frames = np.absolute(np.fft.rfft(frames, NFFT))  # Magnitude of the FFT
 
-		label_batch[i,0,0,0]=test_label[sampleIndex]
+		label_batch[i,0,0,0]=test_label[sample_index]
 		spectrogram_batch[i,0,:,:]= (mag_frames - mag_frames.mean(axis=0)) / mag_frames.std(axis=0)
 
 
@@ -89,6 +90,7 @@ def evaluate_embeddings(net):
 
 
 if __name__ == '__main__':
+
 	allocated_GPU= int(os.environ['SGE_GPU'])
 	print("The training will be executed on GPU #%d" % (allocated_GPU))
 	caffe.set_device(allocated_GPU)

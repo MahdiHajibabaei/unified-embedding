@@ -22,6 +22,7 @@ spectrogram_batch=np.empty([BATCH_SIZE,1,300,257],dtype=float) #np.int((NFFT+1)/
 label_batch=np.empty([BATCH_SIZE,1,1,1],dtype=float)
 MAX_ITERATIONS=61600
 TEST_INTERVAL=1000
+
 # Spectrogram extractor, courtesy of Haytham Fayek
 def spectrogram_extractor(file_name,i):
 
@@ -137,7 +138,7 @@ if __name__ == '__main__':
 	# Uncomment the following block when training from scratch and uncomment to fine-tune
 	''''
 	solver = caffe.SGDSolver("prototxt/LogisticMargin_solver.prototxt")# Network with logistic margin loss function
-	net_weights='result/ResNet-20/512D/Ident/Aug/ResNet-20_512D_iter_61600.caffemodel'
+	net_weights='result/ResNet-20_512D_iter_61600.caffemodel'
 	print("The network will be initialized with %s" % (net_weights))
 	solver.net.copy_from(net_weights)
 	'''
