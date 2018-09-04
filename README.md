@@ -5,7 +5,7 @@ By Mahdi Hajibabaei and Dengxin Dai
 
 This repository contains the code and instruction to replicate the experiments done in paper: [Unified Hypersphere Embedding for Speaker Recognition](https://arxiv.org/abs/1807.08312)
 
-    In this work, first, we train a ResNet-20 with the typical softmax with cross entropy loss function and then fine-tune the network with more discriminative loss function such as A-Softmax, AM-Softmax and logistic margin.
+In this work, first, we train a ResNet-20 with the typical softmax with cross entropy loss function and then fine-tune the network with more discriminative loss function such as A-Softmax, AM-Softmax and logistic margin.
 
 ### Requirements
 1. [*VoxCeleb*](http://www.robots.ox.ac.uk/~vgg/data/voxceleb/vox1.html) dataset and lists of [dataset split](http://www.robots.ox.ac.uk/~vgg/data/voxceleb/meta/iden_split.txt) and [verification evaluation pairs](http://www.robots.ox.ac.uk/~vgg/data/voxceleb/meta/veri_test.txt)
@@ -44,7 +44,7 @@ with softmax and cross entropy loss function by setting the argument of caffe.SG
 3. If you have chosen the mode identification, you need to execute *test_ident.py* script. But before executing, please set the variable *net_weights* to caffemodel that you wish to evaluate and *net_prototxt* to prototxt file of structure of network in interest. Run the script, in the end of execution, the top-1 and top-5 accuracies would be printed in the terminal similar to the message below:
 
 	The top1 accuracy on test set is 0.9447
-	
+
 	The top5 accuracy on test set is 0.9830
 
     Important note: in recent face recognition literature, similarity of two face images are evaluated by first projecting each face image into an embedding space by feeding it to a CNN. Then a score is given to the similarity of images based on cosine similarity of the embeddings of two faces. In result, first we need to embed each sample into a relatively low dimensional embedding space ( by executing embed_verif.py) and then we can use cosine similarity of these embedding to evaluate the odds of two utterances belonging to the same person
