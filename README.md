@@ -24,6 +24,11 @@ Add Pycaffe's path as *PYTHONPATH* environment variable by copying the following
 
 3. Clone this repository
 
+### An Important Note on Repetition and Time-reversion
+
+Usually, during training convolutional neural networks, input tensor that can be three channel RGB intensity of images or any tensor in general are horizontally flipped and fed to the network during training. Even though, horizontally flipping images of faces or object does not alter their precieved identity, these two versions of the same image look different to convolutional neural network in general. This horizontal flipping or mirroring, that is usually done with probability of 50%, increases the number of independent training samples and improve the generalization of trained model (Hoeffding inequality). Eventhough, models trained with this random flipping are expected to predict the same label for flipped and non-flipped input but this happens rarely in practice and most of the time predicted embeddings of the sample that we wish to test are averaged and used for more accurate prediction. This augmentation (time-reversion and repetition) is different from adding environmental noise or convolving the speech recording with room impulse response and can be used in addition to these methods. I will publish the step-by-step recipe for using these two different kinds of augmentation in my following publication and add the link to the code and pre-print in following months. 
+
+
 ### Training with augmentation
 
    Note: Since there is an intersection between the training, validation and testing split for verification and identification. You need to specify which task you want to train for by setting *mode* to either 'identification' or 'verification'. If you want to use this pipeline to train on another dataset please modify the content of parse_list function to append the address of each sample to *_set and its label to *_label.
