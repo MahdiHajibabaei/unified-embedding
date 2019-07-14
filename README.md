@@ -5,7 +5,7 @@ By Mahdi Hajibabaei and Dengxin Dai
 
 This repository contains the code and instruction needed to replicate the experiments done in paper: [Unified Hypersphere Embedding for Speaker Recognition](https://arxiv.org/abs/1807.08312)
 
-Note: In late 2018, collectors of the dataset changed the structure of dataset which is no longer compatible with parse_list function. If you want to use the pipeline with newly structured dataset, write a function that creates *_set and *_label for training, validation and testing.
+Note: In late 2018, collectors of the dataset changed the structure of dataset which is no longer compatible with parse_list function. If you wish to use the pipeline with newly structured dataset, write a function that creates *_set and *_label for training, validation and testing.
 
 In this work, we first train a ResNet-20 with the typical softmax and cross entropy loss function and then fine-tune the network with more discriminative loss function such as A-Softmax, AM-Softmax and logistic margin.
 
@@ -28,13 +28,16 @@ Add Pycaffe's path as *PYTHONPATH* environment variable by copying the following
 
 ### An Important Note on Repetition and Time-reversion
 
-Usually, during training models for visual object recognition, we horizontally flip images before feeding them to the model. Horizontally flipping of an image does not change its label and can be used to increase the number of independent training examples and hopefully improve the generalization power of resulting model. Furthermore, during inference features of the flipped and original image can be averaged to improve the prediction accuracy. Similar to object recognition, we horizontally flip the spectrogram of recordings with probability of 50% for training and testing models. You can observe the spectrograms of a recording before and after time-reversion in the figures below.
-![picture](https://github.com/MahdiHajibabaei/unified-embedding/blob/master/figures/Spectrogram.png)
-![picture](https://github.com/MahdiHajibabaei/unified-embedding/blob/master/figures/reverseSpectrogram.png)
-Spectrogram of the original utterance (top) vs. time-reversed utterance.
+Usually, during training models for visual object recognition, we horizontally flip images before feeding them to the model. Horizontally flipping of an image does not change its label and can be used to increase the number of independent training examples and hopefully improve the generalization power of resulting model. Furthermore, during inference features of the flipped and original image can be averaged to improve the prediction accuracy. Similar to object recognition, we horizontally flip the spectrogram of recordings with probability of 50% for training and testing models. You can observe the spectrograms of a recording before (top) and after (bottom) time-reversion in the figures below.
 
-Time-reversion and repetition is different from adding environmental noise or convolving the speech recording with room impulse response and can be used in addition to these methods.
-** In order to use repetition and time-reversion along addition of noise and room impulse response, append time reverse of signal to itself BEFORE feeding it to the pipeline that adds the environmental noise and room impulse response to the recording.**
+
+![picture](https://github.com/MahdiHajibabaei/unified-embedding/blob/master/figures/Spectrogram.png)
+
+
+![picture](https://github.com/MahdiHajibabaei/unified-embedding/blob/master/figures/reverseSpectrogram.png)
+
+Furthermore, time-reversion and repetition is different from adding environmental noise or convolving the recordings with room impulse response and can be used in addition to these methods.
+** In order to use repetition and time-reversion along addition of noise and room impulse response, append the time-reverse of recording to itself BEFORE feeding it to the pipeline that adds the environmental noise and room impulse response to the recording.**
 
 
 ### Training with augmentation
@@ -60,11 +63,12 @@ with softmax and cross entropy loss function by setting the argument of caffe.SG
 
 	The top5 accuracy on test set is 0.9830
 
-    Important note: in recent face recognition literature, similarity of two face images are evaluated by first projecting each face image into an embedding space by feeding it to a CNN. Then a score is given to the similarity of images based on cosine similarity of the embeddings of two faces. In result, first we need to embed each sample into a relatively low dimensional embedding space ( by executing embed_verif.py) and then we can use cosine similarity of these embedding to evaluate the odds of two utterances belonging to the same person
+    Important note: in recent face recognition literature, similarity of two face images are evaluated by first projecting each image into an embedding space by feeding it to a CNN. Afterwards a similary score is given to pairs of images based on cosine similarity of their embeddings. In result, first we need to embed each sample into a relatively low dimensional embedding space ( by executing embed_verif.py) and then we can use cosine similarity of these embedding to evaluate the odds of two utterances belonging to the same person
 
 4. If you wish to evaluate the verification accuracy of a model trained for the task of verification, you first need to extract the embeddings of utterances within the test set. In order to do so, open the *embed_verif.py* and set the *net_weights* to caffemodel that you wish to evaluate and *net_prototxt* to prototxt of the structure of network of interest. Remember to  set *embedding_file* to a proper name and directory for storing the resulting embedding. After executing embed_verif.py, the message "Embeddings of test utterances are stored in ..." will be printed in terminal.
 
     In order to evaluate the Equal Error Rate (EER) and minimum of detection cost function (DCF) on pairs selected by Nagrani et al., set the *embedding_file* in roc_vox.py to address of the embedding that you wish to evaluate and execute the script. Two figures will be displayed: The first one shows the separation between positive pairs and negative pairs:
+
 ![picture](https://github.com/MahdiHajibabaei/unified-embedding/blob/master/figures/rocVox_pairs.jpeg)
 
 
